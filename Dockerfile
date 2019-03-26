@@ -1,13 +1,15 @@
+# ----------------
+# STEP 1:
+# Build Openzwave and Zwave2Mqtt pkg
 FROM node:alpine AS build
 
-RUN apk update
-
-# Install required build dependencies
-RUN apk --no-cache add \
+# Install required dependencies
+RUN apk update && apk --no-cache add \
       gnutls \
       gnutls-dev \
       libusb \
       eudev \
+      # Install build dependencies
     && apk --no-cache --virtual .build-deps add \
       coreutils \
       eudev-dev \
@@ -22,23 +24,30 @@ RUN apk --no-cache add \
       openssl \
       make 
 
-RUN npm install -g pkg
-
 # Build binaries and move them to /lib/openzwave
 RUN cd /root \
     && wget http://old.openzwave.com/downloads/openzwave-1.4.1.tar.gz \
     && tar zxvf openzwave-*.gz \
-    && cd openzwave-* && make && make install \
-    && mkdir -p /lib/openzwave \
-    && mv libopenzwave.so* /lib/openzwave
+    && cd openzwave-* && make \
+    && mkdir -p /dist/lib \
+    && mv libopenzwave.so* /dist/lib/
 
 # Clone repo and build pkg files
 COPY bin/package.sh /root/package.sh
-RUN cd /root && chmod +x package.sh && ./package.sh
+RUN npm install -g pkg \
+    && cd /root && chmod +x package.sh && ./package.sh \
+    && mkdir -p /dist/pkg \
+    && mv /root/Zwave2Mqtt/pkg/* /dist/pkg
 
 # Get last config DB from main repo
 RUN cd /root \
-    && git clone https://github.com/OpenZWave/open-zwave.git
+    && git clone https://github.com/OpenZWave/open-zwave.git \
+    && cd open-zwave \
+    && mkdir -p /dist/db \
+    && mv config/* /dist/db
+
+# Clean up
+RUN rm -R /root/* && apk del .build-deps
 
 # ----------------
 # STEP 2:
@@ -53,9 +62,9 @@ RUN apk update && apk add --no-cache \
     libusb \
     eudev 
 
-COPY --from=build /root/open-zwave/config/ /usr/local/etc/openzwave/ 
-COPY --from=build /lib/openzwave/ /lib/
-COPY --from=build root/Zwave2Mqtt/pkg /usr/src/app
+COPY --from=build /dist/lib/ /lib/
+COPY --from=build /dist/db/ /usr/local/etc/openzwave/ 
+COPY --from=build /dist/pkg /usr/src/app
 
 # Set enviroment
 ENV LD_LIBRARY_PATH /lib
