@@ -24,18 +24,17 @@ RUN apk --no-cache add \
 
 RUN npm install -g pkg
 
-# Clone repo and build pkg files
-COPY bin/package.sh /root/package.sh
-RUN cd /root && chmod +x package.sh
-RUN [ "/bin/bash", "root/package.sh" ]
-
 # Build binaries and move them to /lib/openzwave
 RUN cd /root \
     && wget http://old.openzwave.com/downloads/openzwave-1.4.1.tar.gz \
     && tar zxvf openzwave-*.gz \
-    && cd openzwave-* && make \
+    && cd openzwave-* && make && make install \
     && mkdir -p /lib/openzwave \
     && mv libopenzwave.so* /lib/openzwave
+
+# Clone repo and build pkg files
+COPY bin/package.sh /root/package.sh
+RUN cd /root && chmod +x package.sh && ./package.sh
 
 # Get last config DB from main repo
 RUN cd /root \
