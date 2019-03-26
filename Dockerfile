@@ -38,6 +38,8 @@ RUN cd /root \
 # run with alpine
 FROM alpine:latest
 
+LABEL maintainer="robertsLando"
+
 RUN mkdir -p /usr/local/etc/openzwave
 RUN apk update && apk add --no-cache \
     libstdc++  \
