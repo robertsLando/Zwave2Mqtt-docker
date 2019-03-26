@@ -1,7 +1,6 @@
-# ----------------
-# STEP 1:
-# build files
-FROM alpine:latest AS build
+FROM node:alpine AS build
+
+RUN apk update
 
 # Install required build dependencies
 RUN apk --no-cache add \
@@ -14,12 +13,21 @@ RUN apk --no-cache add \
       eudev-dev \
       build-base \
       git \
+      python \
+      bash \
       libusb-dev \
       linux-headers \
       wget \
       tar  \
-      make \
-      openssl
+      openssl \
+      make 
+
+RUN npm install -g pkg
+
+# Clone repo and build pkg files
+COPY bin/package.sh /root/package.sh
+RUN cd /root && chmod +x package.sh
+RUN [ "/bin/bash", "root/package.sh" ]
 
 # Build binaries and move them to /lib/openzwave
 RUN cd /root \
@@ -40,7 +48,6 @@ FROM alpine:latest
 
 LABEL maintainer="robertsLando"
 
-RUN mkdir -p /usr/local/etc/openzwave
 RUN apk update && apk add --no-cache \
     libstdc++  \
     libgcc \
@@ -49,13 +56,12 @@ RUN apk update && apk add --no-cache \
 
 COPY --from=build /root/open-zwave/config/ /usr/local/etc/openzwave/ 
 COPY --from=build /lib/openzwave/ /lib/
+COPY --from=build root/Zwave2Mqtt/pkg /usr/src/app
 
 # Set enviroment
 ENV LD_LIBRARY_PATH /lib
 
 WORKDIR /usr/src/app
-
-COPY pkg/ ./
 
 EXPOSE 8091
 

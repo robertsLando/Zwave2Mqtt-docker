@@ -21,6 +21,10 @@ Delete Volume
 
 `docker volume rm zwave2mqtt`
 
+## Build
+
+`docker build -t robertslando/zwave2mqtt .`
+
 ## SSH inside container
 
 ```bash
