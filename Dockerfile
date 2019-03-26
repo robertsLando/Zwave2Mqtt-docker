@@ -1,4 +1,7 @@
-FROM alpine:latest
+# ----------------
+# STEP 1:
+# build files
+FROM alpine:latest AS build
 
 # Install required build dependencies
 RUN apk --no-cache add \
@@ -18,25 +21,32 @@ RUN apk --no-cache add \
       make \
       openssl
 
-# Build binaries
+# Build binaries and move them to /lib/openzwave
 RUN cd /root \
     && wget http://old.openzwave.com/downloads/openzwave-1.4.1.tar.gz \
     && tar zxvf openzwave-*.gz \
     && cd openzwave-* && make \
-    && cp libopenzwave.so* /lib
+    && mkdir -p /lib/openzwave \
+    && mv libopenzwave.so* /lib/openzwave
 
 # Get last config DB from main repo
 RUN cd /root \
-    && git clone https://github.com/OpenZWave/open-zwave.git \
-    && cd open-zwave \
-    && mkdir -p /usr/local/etc/openzwave \
-    && cp -R config/* /usr/local/etc/openzwave/ 
-    
-# Clean up files
-RUN rm -R /root/*
+    && git clone https://github.com/OpenZWave/open-zwave.git
 
-# Remove build dependencies
-RUN apk del .build-deps
+# ----------------
+# STEP 2:
+# run with alpine
+FROM alpine:latest
+
+RUN mkdir -p /usr/local/etc/openzwave
+RUN apk update && apk add --no-cache \
+    libstdc++  \
+    libgcc \
+    libusb \
+    eudev 
+
+COPY --from=build /root/open-zwave/config/ /usr/local/etc/openzwave/ 
+COPY --from=build /lib/openzwave/ /lib/
 
 # Set enviroment
 ENV LD_LIBRARY_PATH /lib

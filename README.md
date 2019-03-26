@@ -6,7 +6,7 @@ Docker container for Zwave2Mqtt Gateway and Control Panel app
 Run the following command
 
 ```bash
-docker run -p 8091:8091 --device=/dev/ttyACM0 robertslando/zwave2mqtt:latest
+docker run --rm -it -p 8091:8091 --device=/dev/ttyACM0 robertslando/zwave2mqtt:latest
 ```
 
 Replace `/dev/ttyACM0` with your serial device
