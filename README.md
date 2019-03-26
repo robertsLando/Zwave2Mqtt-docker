@@ -5,7 +5,7 @@ Docker container for Zwave2Mqtt Gateway and Control Panel app using pkg
 Image size acually is lower than 80MB:
 
 ```bash
-daniel@daniel-innovation:/media/daniel/DATA/Git-Projects/Zwave2Mqtt-docker$ docker images
+daniel@daniel-innovation:~/Zwave2Mqtt-docker$ docker images
 REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
 robertslando/zwave2mqtt   latest              90f8521faab4        51 seconds ago      77.5MB
 ```
