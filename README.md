@@ -24,7 +24,7 @@ docker run --rm -it -p 8091:8091 --device=/dev/ttyACM0 --mount source=zwave2mqtt
 Check files inside volume
 
 ```bash
-docker run -it --mount source=zwave2mqtt,target=/usr/src/app robertslando/zwave2mqtt:latest find /usr/src/app
+docker run --rm -it --mount source=zwave2mqtt,target=/usr/src/app robertslando/zwave2mqtt:latest find /usr/src/app
 ```
 
 Delete Volume
@@ -39,8 +39,19 @@ docker volume rm zwave2mqtt
 docker build -t robertslando/zwave2mqtt .
 ```
 
+Build `build` container
+
+```bash
+docker build --target=build -t robertslando/zwave2mqtt_build .
+
+```
+
 ## SSH inside container
 
 ```bash
-docker run -p 8091:8091 --device=/dev/ttyACM0 -it --mount source=zwave2mqtt,target=/usr/src/app robertslando/zwave2mqtt:latest sh
+docker run --rm -p 8091:8091 --device=/dev/ttyACM0 -it --mount source=zwave2mqtt,target=/usr/src/app robertslando/zwave2mqtt:latest sh
+```
+
+```bash
+docker run --rm -p 8091:8091 --device=/dev/ttyACM0 -it --mount source=zwave2mqtt,target=/dist/pkg robertslando/zwave2mqtt_build sh
 ```

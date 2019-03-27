@@ -17,25 +17,11 @@ VERSION=$(node -p "require('./package.json').version")
 echo "Version: $VERSION"
 
 echo "## Creating application package in $PKG_FOLDER folder"
-/usr/local/bin/pkg package.json -t node8-alpine-x64 --out-path $PKG_FOLDER
+# Node version MUST be the same of the container
+pkg package.json -t node8-alpine-x64 --out-path $PKG_FOLDER
 
-echo "## Check for .node files to include in executable folder"
-declare TO_INCLUDE=($(find ./node_modules/ -type f -name "*.node"))
-
-TOTAL_INCLUDE=${#TO_INCLUDE[@]}
-
-echo "## Found $TOTAL_INCLUDE files to include"
-
-i=0
-
-while [ "$i" -lt "$TOTAL_INCLUDE" ]
-do
-  IFS='/' path=(${TO_INCLUDE[$i]})
-  file=${path[-1]}
-  echo "## Copying $file to $PKG_FOLDER folder"
-  cp "${TO_INCLUDE[$i]}" "./$PKG_FOLDER"
-  let "i = $i + 1"
-done
+cp ./node_modules/@serialport/bindings/build/Release/bindings.node $PKG_FOLDER
+cp ./node_modules/openzwave-shared/build/Release/openzwave_shared.node $PKG_FOLDER
 
 echo "## Create folders needed"
 cd $PKG_FOLDER

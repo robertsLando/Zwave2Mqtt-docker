@@ -1,7 +1,7 @@
 # ----------------
 # STEP 1:
 # Build Openzwave and Zwave2Mqtt pkg
-FROM node:alpine AS build
+FROM node:8.15.1-alpine AS build
 
 # Install required dependencies
 RUN apk update && apk --no-cache add \
@@ -47,7 +47,7 @@ RUN cd /root \
     && mv config/* /dist/db
 
 # Clean up
-RUN rm -R /root/* && apk del .build-deps
+# RUN rm -R /root/* && apk del .build-deps
 
 # ----------------
 # STEP 2:
