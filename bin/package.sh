@@ -7,6 +7,7 @@ echo "## Clone and build application $APP"
 cd /root
 git clone https://github.com/robertsLando/Zwave2Mqtt.git
 cd Zwave2Mqtt
+git checkout ${Z2M_VERSION}
 npm install
 npm run build
 

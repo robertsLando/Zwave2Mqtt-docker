@@ -4,6 +4,9 @@
 # All result files will be put in /dist folder
 FROM node:8.15.1-alpine AS build
 
+# Set the commit of Zwave2Mqtt to checkout when cloning the repo
+ENV Z2M_VERSION=dfc2c3713cf5677006eff5469c54cf6b61bba3c5
+
 # Install required dependencies
 RUN apk update && apk --no-cache add \
       gnutls \
