@@ -47,7 +47,7 @@ RUN cd /root \
     && mv config/* /dist/db
 
 # Clean up
-# RUN rm -R /root/* && apk del .build-deps
+RUN rm -R /root/* && apk del .build-deps
 
 # ----------------
 # STEP 2:
