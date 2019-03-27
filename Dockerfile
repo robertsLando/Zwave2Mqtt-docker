@@ -1,6 +1,7 @@
 # ----------------
 # STEP 1:
 # Build Openzwave and Zwave2Mqtt pkg
+# All result files will be put in /dist folder
 FROM node:8.15.1-alpine AS build
 
 # Install required dependencies
@@ -24,7 +25,7 @@ RUN apk update && apk --no-cache add \
       openssl \
       make 
 
-# Build binaries and move them to /lib/openzwave
+# Build binaries and move them to /dist/lib
 RUN cd /root \
     && wget http://old.openzwave.com/downloads/openzwave-1.4.1.tar.gz \
     && tar zxvf openzwave-*.gz \
@@ -32,14 +33,14 @@ RUN cd /root \
     && mkdir -p /dist/lib \
     && mv libopenzwave.so* /dist/lib/
 
-# Clone repo and build pkg files
+# Clone Zwave2Mqtt build pkg files and move them to /dist/pkg
 COPY bin/package.sh /root/package.sh
 RUN npm install -g pkg \
     && cd /root && chmod +x package.sh && ./package.sh \
     && mkdir -p /dist/pkg \
     && mv /root/Zwave2Mqtt/pkg/* /dist/pkg
 
-# Get last config DB from main repo
+# Get last config DB from main repo and move files to /dist/db
 RUN cd /root \
     && git clone https://github.com/OpenZWave/open-zwave.git \
     && cd open-zwave \
@@ -51,7 +52,7 @@ RUN rm -R /root/* && apk del .build-deps
 
 # ----------------
 # STEP 2:
-# run with alpine
+# Run a minimal alpine image
 FROM alpine:latest
 
 LABEL maintainer="robertsLando"
@@ -62,6 +63,7 @@ RUN apk update && apk add --no-cache \
     libusb \
     eudev 
 
+# Copy files from previous build stage
 COPY --from=build /dist/lib/ /lib/
 COPY --from=build /dist/db/ /usr/local/etc/openzwave/ 
 COPY --from=build /dist/pkg /usr/src/app
