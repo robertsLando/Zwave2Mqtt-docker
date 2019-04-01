@@ -23,15 +23,17 @@ build_uname_arch=$(uname -m | tr '[:upper:]' '[:lower:]' )
 
 echo Build Arch: ${build_uname_arch}
 
+mkdir -p ~/.pkg-cache/v2.5
+
 case ${build_uname_arch} in
   x86_64  ) pkg_arch=x64 ;;
   aarch64 ) pkg_arch=arm64 
             wget https://github.com/robertsLando/pkg-binaries/raw/master/arm64/fetched-v8.11.3-linux-arm64 -O fetched-v8.11.3-linux-arm64
-            mv fetched-v8.11.3-linux-arm64 ~/.pkg-cache/
+            mv fetched-v8.11.3-linux-arm64 ~/.pkg-cache/v2.5
             ;;
   arm*    ) pkg_arch=armv7
             wget https://github.com/robertsLando/pkg-binaries/raw/master/arm32/fetched-v8.11.3-linux-armv7 -O fetched-v8.11.3-linux-armv7
-            mv fetched-v8.11.3-linux-armv7 ~/.pkg-cache/
+            mv fetched-v8.11.3-linux-armv7 ~/.pkg-cache/v2.5
             fix=--public-packages=*
             ;;
   *)
