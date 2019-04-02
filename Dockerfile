@@ -36,10 +36,19 @@ RUN cd /root \
     && mkdir -p /dist/lib \
     && mv libopenzwave.so* /dist/lib/
 
-# Clone Zwave2Mqtt build pkg files and move them to /dist/pkg
 COPY bin/package.sh /root/package.sh
+
+# Clone Zwave2Mqtt build pkg files and move them to /dist/pkg
 RUN npm config set unsafe-perm true && npm install -g pkg \
-    && cd /root && chmod +x package.sh && ./package.sh \
+    && cd /root \
+    && git clone https://github.com/robertsLando/Zwave2Mqtt.git  \
+    && cd Zwave2Mqtt \
+    && git checkout ${Z2M_VERSION} \
+    && npm install \
+    && npm run build
+
+RUN cd /root \
+    && chmod +x package.sh && ./package.sh \
     && mkdir -p /dist/pkg \
     && mv /root/Zwave2Mqtt/pkg/* /dist/pkg
 

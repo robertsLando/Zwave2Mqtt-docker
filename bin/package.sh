@@ -1,18 +1,12 @@
 #!/bin/bash
 
-APP="zwave2mqtt"
+APP="Zwave2Mqtt"
 PKG_FOLDER="pkg"
-
-echo "## Clone and build application $APP"
-cd /root
-git clone https://github.com/robertsLando/Zwave2Mqtt.git
-cd Zwave2Mqtt
-git checkout ${Z2M_VERSION}
-npm install
-npm run build
 
 echo "Destination folder: $PKG_FOLDER"
 echo "App-name: $APP"
+
+cd /root/$APP
 
 VERSION=$(node -p "require('./package.json').version")
 echo "Version: $VERSION"
@@ -28,12 +22,12 @@ mkdir -p ~/.pkg-cache/v2.5
 case ${build_uname_arch} in
   x86_64  ) pkg_arch=x64 ;;
   aarch64 ) pkg_arch=arm64 
-            wget https://github.com/robertsLando/pkg-binaries/raw/master/arm64/fetched-v8.11.3-linux-arm64 -O fetched-v8.11.3-linux-arm64
-            mv fetched-v8.11.3-linux-arm64 ~/.pkg-cache/v2.5
+            wget https://github.com/robertsLando/pkg-binaries/raw/master/arm64/fetched-v8.11.3-alpine-arm64 -O fetched-v8.11.3-alpine-arm64
+            mv fetched-v8.11.3-alpine-arm64 ~/.pkg-cache/v2.5
             ;;
   arm*    ) pkg_arch=armv7
-            wget https://github.com/robertsLando/pkg-binaries/raw/master/arm32/fetched-v8.11.3-linux-armv7 -O fetched-v8.11.3-linux-armv7
-            mv fetched-v8.11.3-linux-armv7 ~/.pkg-cache/v2.5
+            wget https://github.com/robertsLando/pkg-binaries/raw/master/arm32/fetched-v8.11.3-alpine-armv7 -O fetched-v8.11.3-alpine-armv7
+            mv fetched-v8.11.3-alpine-armv7 ~/.pkg-cache/v2.5
             fix=--public-packages=*
             ;;
   *)
