@@ -49,7 +49,7 @@ if [ -d ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-${IMAGE_VERSION} ]; 
   rm -rf ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-${IMAGE_VERSION}
 fi
 
-# Include latest to manifest for amd64 that is builded with autobuilds in dockerhub
+# Include latest to manifest for amd64 that is builded with auto-builds in docker-hub
 docker manifest create --amend ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${arch_images}
 
 for docker_arch in ${TARGET_ARCHES}; do
