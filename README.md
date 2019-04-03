@@ -14,13 +14,19 @@ REPOSITORY                      TAG                 IMAGE ID            CREATED 
 robertslando/zwave2mqtt         latest              043a0d327ad6        2 minutes ago       76.7MB
 ```
 
+## Tags
+
+Supported architectures are:
+
+- `x86_64` Tag `:latest`
+- `armv32` (`armv7`, `armv6`) Tag `:arm32v6-latest`
+- `arm64` Tag `:arm64v8-latest`
+
 ## Install
 
 Run the following command
 
 ```bash
-# Pull the image from DockerHub
-docker pull robertslando/zwave2mqtt:latest
 # Create a volume for presistence data
 docker volume create zwave2mqtt
 # Start the container
@@ -28,6 +34,10 @@ docker run --rm -it -p 8091:8091 --device=/dev/ttyACM0 --mount source=zwave2mqtt
 ```
 
 > Replace `/dev/ttyACM0` with your serial device
+
+If you get the error `standard_init_linux.go:207: exec user process caused "exec format error"` probably it's because you previously installed a wrong architecture version of the package so in that case try to remove the container and create an empty one:
+
+`docker volume rm zwave2mqtt && docker volume create zwave2mqtt`
 
 Check files inside volume
 

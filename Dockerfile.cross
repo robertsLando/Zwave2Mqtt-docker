@@ -1,10 +1,11 @@
 # ----------------
 # STEP 1:
+# https://lobradov.github.io/Building-docker-multiarch-images/
 # Build Openzwave and Zwave2Mqtt pkg
 # All result files will be put in /dist folder
-FROM arm32v6/node:8.15.1-alpine AS build
+FROM __BUILD_ARCH__/node:8.15.1-alpine AS build
 
-COPY bin/qemu-arm-static /usr/bin/
+COPY bin/qemu-__QEMU__-static /usr/bin/
 
 # Set the commit of Zwave2Mqtt to checkout when cloning the repo
 ENV Z2M_VERSION=dfc2c3713cf5677006eff5469c54cf6b61bba3c5
@@ -67,9 +68,9 @@ RUN rm -R /root/* && apk del .build-deps
 # ----------------
 # STEP 2:
 # Run a minimal alpine image
-FROM arm32v6/alpine:latest
+FROM __DOCKER_ARCH__/alpine:latest
 
-COPY bin/qemu-arm-static /usr/bin/
+COPY bin/qemu-__QEMU__-static /usr/bin/
 
 LABEL maintainer="robertsLando"
 

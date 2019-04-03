@@ -1,5 +1,6 @@
 # ----------------
 # STEP 1:
+# https://lobradov.github.io/Building-docker-multiarch-images/
 # Build Openzwave and Zwave2Mqtt pkg
 # All result files will be put in /dist folder
 FROM node:8.15.1-alpine AS build
