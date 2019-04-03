@@ -18,9 +18,10 @@ robertslando/zwave2mqtt         latest              043a0d327ad6        2 minute
 
 Supported architectures are:
 
-- `x86_64` Tag `:latest`
-- `armv32` (`armv7`, `armv6`) Tag `:arm32v6-latest`
-- `arm64` Tag `:arm64v8-latest`
+- `x86_64 amd64` Tag `:latest`
+- `armv6`  Tag `:arm32v6-latest`
+- `armv7`  Tag `:arm32v7-latest` (Raspberry PI)
+- `arm64` Tag `:arm64v8-latest` (OrangePI NanoPI)
 
 ## Install
 
