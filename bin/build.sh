@@ -12,7 +12,10 @@ IMAGE_NAME="zwave2mqtt"
 IMAGE_VERSION="latest"
 TARGET_ARCHES="arm32v6 arm32v7 arm64v8"
 
+cd ..
+
 for docker_arch in ${TARGET_ARCHES}; do
+    echo INFO: Creating Dockerfile for ${docker_arch}
     cp Dockerfile.cross Dockerfile.${docker_arch}
     case ${docker_arch} in
         arm32v6 ) qemu="arm" build_arch="arm32v6";;
@@ -27,8 +30,14 @@ for docker_arch in ${TARGET_ARCHES}; do
     sed -i "s|__QEMU__|${qemu}|g" Dockerfile.${docker_arch}
     sed -i "s|__DOCKER_ARCH__|${docker_arch}|g" Dockerfile.${docker_arch}
 
+    echo INFO: Building of ${REPO}/${IMAGE_NAME}:${docker_arch}-latest
     docker build -f Dockerfile.${docker_arch} -t ${REPO}/${IMAGE_NAME}:${docker_arch}-latest .
+
+    echo INFO: Successfully built ${REPO}/${IMAGE_NAME}:${docker_arch}-latest
+    echo INFO: Pushing to ${REPO}/${IMAGE_NAME}
+    
     docker push ${REPO}/${IMAGE_NAME}:${docker_arch}-latest
+
     arch_images="${arch_images} ${REPO}/${IMAGE_NAME}:${docker_arch}-${IMAGE_VERSION}"
     rm Dockerfile.${docker_arch}
 done
