@@ -35,7 +35,7 @@ for docker_arch in ${TARGET_ARCHES}; do
 
     echo INFO: Successfully built ${REPO}/${IMAGE_NAME}:${docker_arch}-latest
     echo INFO: Pushing to ${REPO}/${IMAGE_NAME}
-    
+
     docker push ${REPO}/${IMAGE_NAME}:${docker_arch}-latest
 
     arch_images="${arch_images} ${REPO}/${IMAGE_NAME}:${docker_arch}-${IMAGE_VERSION}"
@@ -49,7 +49,9 @@ if [ -d ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-${IMAGE_VERSION} ]; 
   rm -rf ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-${IMAGE_VERSION}
 fi
 
-docker manifest create --amend ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${arch_images}
+# Include latest to manifest for amd64 that is builded with autobuilds in dockerhub
+docker manifest create --amend ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${arch_images}
+
 for docker_arch in ${TARGET_ARCHES}; do
   case ${docker_arch} in
     arm32v6 ) annotate_flags="--os linux --arch arm --variant armv6" ;;
