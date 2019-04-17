@@ -42,7 +42,7 @@ COPY bin/package.sh /root/package.sh
 # Clone Zwave2Mqtt build pkg files and move them to /dist/pkg
 RUN npm config set unsafe-perm true && npm install -g pkg \
     && cd /root \
-    && git clone https://github.com/robertsLando/Zwave2Mqtt.git  \
+    && git clone https://github.com/OpenZWave/Zwave2Mqtt.git  \
     && cd Zwave2Mqtt \
     && git checkout ${Z2M_VERSION} \
     && npm install \
