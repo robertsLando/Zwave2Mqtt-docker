@@ -28,17 +28,45 @@ Supported architectures are:
 Run the following command
 
 ```bash
-# Create a volume for presistence data
-docker volume create zwave2mqtt
 # Start the container
 docker run --rm -it -p 8091:8091 --device=/dev/ttyACM0 --mount source=zwave2mqtt,target=/usr/src/app robertslando/zwave2mqtt:latest
 ```
 
-> Replace `/dev/ttyACM0` with your serial device
+> Replace `/dev/ttyACM0` with your serial device and `latest` with your arch if different than `x86_64 amd64`
 
-If you get the error `standard_init_linux.go:207: exec user process caused "exec format error"` probably it's because you previously installed a wrong architecture version of the package so in that case try to remove the container and create an empty one:
+### RUN AS A SERVICE
 
-`docker volume rm zwave2mqtt && docker volume create zwave2mqtt`
+To run the app as a service you can use the `docker-compose.yml` file you find on [github repo](https://github.com/robertsLando/Zwave2Mqtt-docker/tree/master/compose/docker-compose.yml). Here is the content:
+
+```yml
+version: "3.7"
+services:
+  zwave2mqtt:
+    container_name: zwave2mqtt
+    image: robertslando/zwave2mqtt:latest
+    restart: always
+    tty: true
+    stop_signal: SIGINT
+    networks:
+      - zwave
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
+    volumes:
+      - zwave2mqtt:/usr/src/app
+    ports:
+      - "8091:8091"
+networks:
+  zwave:
+volumes:
+  zwave2mqtt:
+    name: zwave2mqtt
+```
+
+### ATTENTION
+
+If you get the error `standard_init_linux.go:207: exec user process caused "exec format error"` probably it's because you previously installed a wrong architecture version of the package so in that case you must delete the existing volume that contains the old executable:
+
+`docker volume rm zwave2mqtt`
 
 Check files inside volume
 
