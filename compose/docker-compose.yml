@@ -11,12 +11,12 @@ services:
     devices:
       - "/dev/ttyACM0:/dev/ttyACM0"
     volumes:
-      - zwave2mqtt:/usr/src/app
+      - ./store:/usr/src/app/store
     ports:
       - "8091:8091"
 networks:
   zwave:
-volumes:
-  zwave2mqtt:
-    name: zwave2mqtt
+# volumes:
+#   zwave2mqtt:
+#     name: zwave2mqtt
 

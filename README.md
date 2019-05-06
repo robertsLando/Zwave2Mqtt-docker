@@ -25,16 +25,26 @@ Supported architectures are:
 
 ## Install
 
-Run the following command
-
-```bash
-# Start the container
-docker run --rm -it -p 8091:8091 --device=/dev/ttyACM0 --mount source=zwave2mqtt,target=/usr/src/app robertslando/zwave2mqtt:latest
-```
+Here there are 3 different way to start the container and provide data persistence. In all of this solutions **remember to**:
 
 > Replace `/dev/ttyACM0` with your serial device and `latest` with your arch if different than `x86_64 amd64`
 
-### RUN AS A SERVICE
+### Run using volumes
+
+```bash
+docker run --rm -it -p 8091:8091 --device=/dev/ttyACM0 --mount source=zwave2mqtt,target=/usr/src/app/store robertslando/zwave2mqtt:latest
+```
+
+### Run using local folder
+
+Here we will store our data in the current path (`$(pwd)`) named `store`. You can choose the path and the directory name you prefer, a valid alternative (with linux) could be `/var/lib/zwave2mqtt`
+
+```bash
+mkdir store
+docker run --rm -it -p 8091:8091 --device=/dev/ttyACM0 -v $(pwd)/store:/usr/src/app/store robertslando/zwave2mqtt:latest
+```
+
+### Run as a service
 
 To run the app as a service you can use the `docker-compose.yml` file you find on [github repo](https://github.com/robertsLando/Zwave2Mqtt-docker/tree/master/compose/docker-compose.yml). Here is the content:
 
@@ -52,15 +62,29 @@ services:
     devices:
       - "/dev/ttyACM0:/dev/ttyACM0"
     volumes:
-      - zwave2mqtt:/usr/src/app
+      - ./store:/usr/src/app/store
     ports:
       - "8091:8091"
 networks:
   zwave:
-volumes:
-  zwave2mqtt:
-    name: zwave2mqtt
+# volumes:
+#   zwave2mqtt:
+#     name: zwave2mqtt
 ```
+
+Like the other solutions, remember to replace device `/dev/ttyACM0` with the path of your USB stick and choose the solution you prefer for data persistence.
+
+### Upgrade from 1.0.0 to 1.1.0
+
+In 1.0.0 version all application data where stored inside the volume. This could cause many problems expectially when upgrading. To prevent this, starting from version 1.1.0 all persistence data have been moved to application `store` folder. If you have all your data stored inside a volume `zwave2mqtt` this is how to backup them:
+
+```bash
+APP=$(docker run --rm -it -d --mount source=zwave2mqtt,target=/usr/src/app robertslando/zwave2mqtt:latest)
+docker cp $APP:/usr/src/app ./
+docker kill $APP
+```
+
+This will create a directory `app` with all app data inside. Move all files like `OZW_log.txt zwscene.xml zwcfg_<homehex>.xml` in `app/store` folder and use that folder as volume following [this](#run-using-local-folder) section
 
 ### ATTENTION
 
