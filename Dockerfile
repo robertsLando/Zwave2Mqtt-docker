@@ -6,7 +6,7 @@
 FROM node:8.15.1-alpine AS build
 
 # Set the commit of Zwave2Mqtt to checkout when cloning the repo
-ENV Z2M_VERSION=9cc3740740b57f1e896139b5ffdb25be7576ad58
+ENV Z2M_VERSION=5a6bc4636412d210d0d000f59322295aa7c8e690
 
 # Install required dependencies
 RUN apk update && apk --no-cache add \
