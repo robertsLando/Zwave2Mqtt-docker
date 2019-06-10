@@ -23,11 +23,11 @@ case ${build_uname_arch} in
   x86_64  ) pkg_arch=x64 ;;
   aarch64 ) pkg_arch=arm64 
             wget https://github.com/robertsLando/pkg-binaries/raw/master/arm64/fetched-v8.11.3-alpine-arm64 -O fetched-$(node -v)-alpine-arm64
-            mv fetched-v8.11.3-alpine-arm64 ~/.pkg-cache/v2.5
+            mv fetched-$(node -v)-alpine-arm64 ~/.pkg-cache/v2.5
             ;;
   arm*    ) pkg_arch=armv7
             wget https://github.com/robertsLando/pkg-binaries/raw/master/arm32/fetched-v8.11.3-alpine-armv7 -O fetched-$(node -v)-alpine-armv7
-            mv fetched-v8.11.3-alpine-armv7 ~/.pkg-cache/v2.5
+            mv fetched-$(node -v)-alpine-armv7 ~/.pkg-cache/v2.5
             fix=--public-packages=*
             ;;
   *)
