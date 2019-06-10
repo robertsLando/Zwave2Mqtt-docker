@@ -3,10 +3,10 @@
 # https://lobradov.github.io/Building-docker-multiarch-images/
 # Build Openzwave and Zwave2Mqtt pkg
 # All result files will be put in /dist folder
-FROM node:8.15.1-alpine AS build
+FROM node:carbon-alpine AS build
 
 # Set the commit of Zwave2Mqtt to checkout when cloning the repo
-ENV Z2M_VERSION=9cc3740740b57f1e896139b5ffdb25be7576ad58
+ENV Z2M_VERSION=2adc2dd6eebcfa292817fada90afa115a240ab1e
 
 # Install required dependencies
 RUN apk update && apk --no-cache add \

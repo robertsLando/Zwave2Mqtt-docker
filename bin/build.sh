@@ -10,7 +10,7 @@ sudo docker run --rm --privileged multiarch/qemu-user-static:register
 REPO="robertslando"
 IMAGE_NAME="zwave2mqtt"
 IMAGE_VERSION="latest"
-TARGET_ARCHES="arm32v6 arm32v7 arm64v8"
+TARGET_ARCHES="amd64 arm32v6 arm32v7 arm64v8"
 
 cd ..
 
@@ -18,6 +18,7 @@ for docker_arch in ${TARGET_ARCHES}; do
     echo INFO: Creating Dockerfile for ${docker_arch}
     cp Dockerfile.cross Dockerfile.${docker_arch}
     case ${docker_arch} in
+        amd64   ) qemu_arch="x86_64" build_arch="amd64";;
         arm32v6 ) qemu="arm" build_arch="arm32v6";;
         arm32v7 ) qemu="arm" build_arch="arm32v6";;
         arm64v8     ) qemu="aarch64" build_arch="arm64v8";;
