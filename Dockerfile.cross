@@ -4,7 +4,7 @@
 # All result files will be put in /dist folder
 FROM __BUILD_ARCH__/node:carbon-alpine AS build
 
-COPY bin/qemu-__QEMU__-static /usr/bin/
+__CROSS_COPY bin/qemu-__QEMU__-static /usr/bin/
 
 # Set the commit of Zwave2Mqtt to checkout when cloning the repo
 ENV Z2M_VERSION=2adc2dd6eebcfa292817fada90afa115a240ab1e
