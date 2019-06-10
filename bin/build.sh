@@ -32,9 +32,9 @@ for docker_arch in ${TARGET_ARCHES}; do
     sed -i "s|__DOCKER_ARCH__|${docker_arch}|g" Dockerfile.${docker_arch}
 
     if [[ ${docker_arch} == "amd64" ]]; then
-      sed -i '' "/__CROSS_/d" Dockerfile.${docker_arch}
+      sed -i "/__CROSS_/d" Dockerfile.${docker_arch}
     else
-      sed -i '' "s/__CROSS_//g" Dockerfile.${docker_arch}
+      sed -i "s/__CROSS_//g" Dockerfile.${docker_arch}
     fi
 
     echo INFO: Building of ${REPO}/${IMAGE_NAME}:${docker_arch}-latest
