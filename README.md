@@ -18,7 +18,7 @@ robertslando/zwave2mqtt         latest              043a0d327ad6        2 minute
 
 Supported architectures are:
 
-- `x86_64 amd64` Tag `:latest`
+- `x86_64 amd64` Tag `:amd64-latest`
 - `armv6`  Tag `:arm32v6-latest`
 - `armv7`  Tag `:arm32v7-latest` (Raspberry PI)
 - `arm64` Tag `:arm64v8-latest` (OrangePI NanoPI)
@@ -27,7 +27,7 @@ Supported architectures are:
 
 Here there are 3 different way to start the container and provide data persistence. In all of this solutions **remember to**:
 
-> Replace `/dev/ttyACM0` with your serial device and `latest` with your arch if different than `x86_64 amd64`
+> Replace `/dev/ttyACM0` with your serial device
 
 ### Run using volumes
 
