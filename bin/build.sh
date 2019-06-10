@@ -57,10 +57,11 @@ if [ -d ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-${IMAGE_VERSION} ]; 
 fi
 
 # Include latest to manifest for amd64 that is builded with auto-builds in docker-hub
-docker manifest create --amend ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${arch_images}
+docker manifest create --amend ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${arch_images}
 
 for docker_arch in ${TARGET_ARCHES}; do
   case ${docker_arch} in
+    amd64       ) annotate_flags="" ;;
     arm32v6 ) annotate_flags="--os linux --arch arm --variant armv6" ;;
     arm32v7 ) annotate_flags="--os linux --arch arm --variant armv7" ;;
     arm64v8 ) annotate_flags="--os linux --arch arm64 --variant armv8" ;;
