@@ -1,7 +1,8 @@
 #!/bin/bash
-#
+set -e
+
 # Run this to build, tag and create fat-manifest for your images
-# Thanks to: https://lobradov.github.io/Building-docker-multiarch-images/
+# Inspired to: https://lobradov.github.io/Building-docker-multiarch-images/
 
 # Register quemu headers
 sudo docker run --rm --privileged multiarch/qemu-user-static:register
