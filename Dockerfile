@@ -74,6 +74,7 @@ RUN apk update && apk add --no-cache \
     libstdc++  \
     libgcc \
     libusb \
+    tzdata \
     eudev 
 
 # Copy files from previous build stage
