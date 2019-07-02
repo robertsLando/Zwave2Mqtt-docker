@@ -27,7 +27,8 @@ Supported architectures are:
 
 Here there are 3 different way to start the container and provide data persistence. In all of this solutions **remember to**:
 
-> Replace `/dev/ttyACM0` with your serial device
+1. Replace `/dev/ttyACM0` with your serial device
+2. Add `-e TZ=Europe/Stockholm` to the `docker run` command to set the correct timezone in container
 
 ### Run using volumes
 
