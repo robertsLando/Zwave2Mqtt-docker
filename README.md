@@ -105,13 +105,18 @@ Delete Volume
 docker volume rm zwave2mqtt
 ```
 
-## Build
+## Custom builds
+
+Docker images contains latest stable images of [zwave2mqtt](https://github.com/OpenZWave/Zwave2Mqtt) repo. If you want to keep your image updated with latest changes you can build it on your local machine. Just select a commit and replace existing [commit](https://github.com/OpenZWave/Zwave2Mqtt/commits/master) in Dockerfile [here](https://github.com/robertsLando/Zwave2Mqtt-docker/blob/master/Dockerfile#L9)
 
 ```bash
-docker build -t robertslando/zwave2mqtt .
+git clone git@github.com:robertsLando/Zwave2Mqtt-docker.git
+cd Zwave2Mqtt-docker
+sed -i "s|<actualCommit>|<newCommit>|g" Dockerfile
+docker build -t robertslando/zwave2mqtt:latest .
 ```
 
-Build `build` container
+Build just the `build` container
 
 ```bash
 docker build --target=build -t robertslando/zwave2mqtt_build .
