@@ -6,7 +6,7 @@
 FROM node:carbon-alpine AS build
 
 # Set the commit of Zwave2Mqtt to checkout when cloning the repo
-ENV Z2M_VERSION=05061310a34616c3fe751c5a8a8c00a01c12a44e
+ENV Z2M_VERSION=249daa21785a82b8efda0a407a9179257d605c3e
 
 # Install required dependencies
 RUN apk update && apk --no-cache add \
