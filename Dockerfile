@@ -89,4 +89,7 @@ WORKDIR /usr/src/app
 
 EXPOSE 8091
 
+# Override default alpine entrypoint
+ENTRYPOINT [""]
+
 CMD ["/usr/src/app/zwave2mqtt"]
