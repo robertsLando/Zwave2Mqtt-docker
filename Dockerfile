@@ -6,7 +6,7 @@
 FROM node:carbon-alpine AS build
 
 # Set the commit of Zwave2Mqtt to checkout when cloning the repo
-ENV Z2M_VERSION=30c1ba879d4468d30d08f7beacce45ec29af1a02
+ENV Z2M_VERSION=fd2aa6e67bb7c4bee75babd83fc1b5369145b6bf
 
 # Install required dependencies
 RUN apk update && apk --no-cache add \
@@ -29,13 +29,14 @@ RUN apk update && apk --no-cache add \
       openssl \
       make 
 
-# Build binaries and move them to /dist/lib
+# Clone 1.4 branch and move binaries in /dist/lib and devices db on /dist/db
 RUN cd /root \
-    && wget http://old.openzwave.com/downloads/openzwave-1.4.1.tar.gz \
-    && tar zxvf openzwave-*.gz \
-    && cd openzwave-* && make && make install \
+    && git clone -b 1.4 https://github.com/OpenZWave/open-zwave.git \
+    && cd open-zwave && make && make install \
     && mkdir -p /dist/lib \
-    && mv libopenzwave.so* /dist/lib/
+    && mv libopenzwave.so* /dist/lib/ \
+    && mkdir -p /dist/db \
+    && mv config/* /dist/db
 
 COPY bin/package.sh /root/package.sh
 
@@ -52,13 +53,6 @@ RUN cd /root \
     && chmod +x package.sh && ./package.sh \
     && mkdir -p /dist/pkg \
     && mv /root/Zwave2Mqtt/pkg/* /dist/pkg
-
-# Get last config DB from main repo and move files to /dist/db
-RUN cd /root \
-    && git clone https://github.com/OpenZWave/open-zwave.git \
-    && cd open-zwave \
-    && mkdir -p /dist/db \
-    && mv config/* /dist/db
 
 # Clean up
 RUN rm -R /root/* && apk del .build-deps
