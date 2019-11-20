@@ -17,6 +17,31 @@ IMAGE_NAME="zwave2mqtt"
 VERSIONS="$LATEST-dev $LATEST"
 TARGET_ARCHES="amd64 arm32v6 arm32v7 arm64v8"
 
+# 1: Manifest version 2: Image version 3: arch_images
+createManifest() {
+
+  # Update latest manifest
+  if [ -d ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-$1 ]; then
+      rm -rf ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-$1
+  fi
+
+  docker manifest create --amend ${REPO}/${IMAGE_NAME}:$1 $3
+
+  for docker_arch in ${TARGET_ARCHES}; do
+    case ${docker_arch} in
+      amd64       ) annotate_flags="" ;;
+      arm32v6 ) annotate_flags="--os linux --arch arm --variant armv6" ;;
+      arm32v7 ) annotate_flags="--os linux --arch arm --variant armv7" ;;
+      arm64v8 ) annotate_flags="--os linux --arch arm64 --variant armv8" ;;
+    esac
+    echo INFO: Annotating arch: ${docker_arch} with \"${annotate_flags}\"
+    docker manifest annotate ${REPO}/${IMAGE_NAME}:$1 ${REPO}/${IMAGE_NAME}:${docker_arch}-$2 ${annotate_flags}
+  done
+
+  echo INFO: Pushing ${REPO}/${IMAGE_NAME}:$1
+  docker manifest push ${REPO}/${IMAGE_NAME}:$1
+}
+
 cd ..
 
 for IMAGE_VERSION in ${VERSIONS}; do
@@ -69,26 +94,9 @@ for IMAGE_VERSION in ${VERSIONS}; do
 
   echo INFO: Creating fat manifest
 
-  # Remove previously created manifest data
-  if [ -d ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-${IMAGE_VERSION} ]; then
-    rm -rf ~/.docker/manifests/docker.io_${REPO}_${IMAGE_NAME}-${IMAGE_VERSION}
-  fi
-
-  # Include latest to manifest for amd64 that is builded with auto-builds in docker-hub
-  docker manifest create --amend ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${arch_images}
-
-  for docker_arch in ${TARGET_ARCHES}; do
-    case ${docker_arch} in
-      amd64       ) annotate_flags="" ;;
-      arm32v6 ) annotate_flags="--os linux --arch arm --variant armv6" ;;
-      arm32v7 ) annotate_flags="--os linux --arch arm --variant armv7" ;;
-      arm64v8 ) annotate_flags="--os linux --arch arm64 --variant armv8" ;;
-    esac
-    echo INFO: Annotating arch: ${docker_arch} with \"${annotate_flags}\"
-    docker manifest annotate ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION} ${REPO}/${IMAGE_NAME}:${docker_arch}-${IMAGE_VERSION} ${annotate_flags}
-  done
-
-  echo INFO: Pushing ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION}
-  docker manifest push ${REPO}/${IMAGE_NAME}:${IMAGE_VERSION}
+  createManifest $IMAGE_VERSION $IMAGE_VERSION "$arch_images" 
 
 done
+
+# Update latest tag to point to latest version
+createManifest latest $LATEST "$arch_images"
