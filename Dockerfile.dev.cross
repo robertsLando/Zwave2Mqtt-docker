@@ -30,10 +30,11 @@ RUN apk update && apk --no-cache add \
       openssl \
       make 
 
-# Clone 1.4 branch and move binaries in /dist/lib and devices db on /dist/db
+# Get latest stable 1.6 and move binaries in /dist/lib and devices db on /dist/db
 RUN cd /root \
-    && git clone https://github.com/OpenZWave/open-zwave.git \
-    && cd open-zwave && make && make install \
+    && wget http://old.openzwave.com/downloads/openzwave-1.6.962.tar.gz \
+    && tar zxvf openzwave-*.gz \
+    && cd openzwave-* && make && make install \
     && mkdir -p /dist/lib \
     && mv libopenzwave.so* /dist/lib/ \
     && mkdir -p /dist/db \
