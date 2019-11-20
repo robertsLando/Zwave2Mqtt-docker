@@ -24,6 +24,7 @@ for IMAGE_VERSION in ${VERSIONS}; do
   echo INFO: Building $IMAGE_VERSION version
 
   DOCKER_FILE=""
+  arch_images=""
 
   if [[ ${IMAGE_VERSION} == $LATEST ]]; then
     DOCKER_FILE="Dockerfile.latest"
