@@ -20,10 +20,16 @@ robertslando/zwave2mqtt         latest              043a0d327ad6        2 minute
 
 Supported architectures are:
 
-- `x86_64 amd64` Tag `:amd64-latest`
-- `armv6`  Tag `:arm32v6-latest`
-- `armv7`  Tag `:arm32v7-latest` (Raspberry PI)
-- `arm64` Tag `:arm64v8-latest` (OrangePI NanoPI)
+- `x86_64 amd64`
+- `armv6`
+- `armv7` (Ex. Raspberry PI)
+- `arm64` (Ex. OrangePI NanoPI)
+
+Available Tags:
+
+- `latest`: Always points to the latest version published
+- `2.0.6`: OZW 1.4
+- `2.0.6-dev`: OZW 1.6.962
 
 ## Install
 
