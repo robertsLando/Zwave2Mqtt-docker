@@ -53,8 +53,10 @@ for IMAGE_VERSION in ${VERSIONS}; do
 
   if [[ ${IMAGE_VERSION} == $LATEST ]]; then
     DOCKER_FILE="Dockerfile.latest"
+    MANIFEST_VERSION="latest"
   else
     DOCKER_FILE="Dockerfile.dev"
+    MANIFEST_VERSION="latest-dev"
   fi
 
   for docker_arch in ${TARGET_ARCHES}; do
@@ -96,7 +98,7 @@ for IMAGE_VERSION in ${VERSIONS}; do
 
   createManifest $IMAGE_VERSION $IMAGE_VERSION "$arch_images" 
 
-done
+  # Update latest and latest-dev tag to point to latest versions
+  createManifest $MANIFEST_VERSION $IMAGE_VERSION "$arch_images"
 
-# Update latest tag to point to latest version
-createManifest latest $LATEST "$arch_images"
+done
