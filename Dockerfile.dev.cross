@@ -32,7 +32,7 @@ RUN apk update && apk --no-cache add \
 
 # Get latest stable 1.6 and move binaries in /dist/lib and devices db on /dist/db
 RUN cd /root \
-    && wget http://old.openzwave.com/downloads/openzwave-1.6.962.tar.gz \
+    && wget http://old.openzwave.com/downloads/openzwave-1.6.1004.tar.gz \
     && tar zxvf openzwave-*.gz \
     && cd openzwave-* && make && make install \
     && mkdir -p /dist/lib \
