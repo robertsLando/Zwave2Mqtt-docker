@@ -25,7 +25,10 @@ Supported architectures are:
 
 Available Tags:
 
-- `latest`: Always points to the latest version published
+- `latest`: Always points to the latest version published using OZW 1.4
+- `latest-dev`: Always points to the latest version published using OZW 1.6
+- `2.1.0`: OZW 1.4
+- `2.1.0-dev`: OZW 1.6.962
 - `2.0.6`: OZW 1.4
 - `2.0.6-dev`: OZW 1.6.962
 
