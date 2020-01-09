@@ -67,7 +67,7 @@ RUN apk update && apk add --no-cache \
 # Copy files from previous build stage
 COPY --from=build /dist/lib/ /lib/
 COPY --from=build /dist/db/ /usr/local/etc/openzwave/ 
-COPY --from=build /dist/app /usr/src/app
+COPY --from=build /dist/app/ /usr/src/app/
 
 # Set enviroment
 ENV LD_LIBRARY_PATH /lib
