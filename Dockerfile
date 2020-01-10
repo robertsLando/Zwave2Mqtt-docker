@@ -3,7 +3,7 @@
 # https://lobradov.github.io/Building-docker-multiarch-images/
 # Build Openzwave and Zwave2Mqtt pkg
 # All result files will be put in /dist folder
-FROM node:carbon-alpine AS build
+FROM node:erbium-alpine AS build
 
 # Set the commit of Zwave2Mqtt to checkout when cloning the repo
 ENV Z2M_VERSION=ba709b0a6b52b3d2c3a84072d90b2b654626de8e
@@ -54,7 +54,7 @@ RUN rm -R /root/* && apk del .build-deps
 
 # ----------------
 # STEP 2:
-FROM node:carbon-alpine
+FROM node:erbium-alpine
 
 LABEL maintainer="robertsLando"
 

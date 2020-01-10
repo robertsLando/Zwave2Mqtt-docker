@@ -2,7 +2,7 @@
 # STEP 1:
 # Build Openzwave and Zwave2Mqtt pkg
 # All result files will be put in /dist folder
-FROM __BUILD_ARCH__/node:carbon-alpine AS build
+FROM __BUILD_ARCH__/node:erbium-alpine AS build
 
 __CROSS_COPY bin/qemu-__QEMU__-static /usr/bin/
 
@@ -56,7 +56,7 @@ RUN rm -R /root/* && apk del .build-deps
 # ----------------
 # STEP 2:
 # Run a minimal alpine image
-FROM __BUILD_ARCH__/node:carbon-alpine
+FROM __BUILD_ARCH__/node:erbium-alpine
 
 COPY bin/qemu-__QEMU__-static /usr/bin/
 
