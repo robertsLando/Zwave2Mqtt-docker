@@ -15,7 +15,7 @@ rm package.json
 REPO="robertslando"
 IMAGE_NAME="zwave2mqtt"
 VERSIONS="$LATEST-dev $LATEST"
-TARGET_ARCHES="amd64 arm32v6 arm32v7 arm64v8"
+TARGET_ARCHES="arm32v6 arm32v7 arm64v8 amd64"
 
 # $1: Manifest version $2: Image version $3: arch_images
 createManifest() {

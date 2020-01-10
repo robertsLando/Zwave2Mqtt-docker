@@ -21,7 +21,7 @@ RUN apk update && apk --no-cache add \
       eudev-dev \
       build-base \
       git \
-      python \
+      python2-dev~=2.7 \
       bash \
       libusb-dev \
       linux-headers \
@@ -44,6 +44,7 @@ RUN cd /root \
     && git clone https://github.com/OpenZWave/Zwave2Mqtt.git  \
     && cd Zwave2Mqtt \
     && git checkout ${Z2M_VERSION} \
+    && npm config set unsafe-perm true \
     && npm install \
     && npm run build \
     && mkdir -p /dist/app \
