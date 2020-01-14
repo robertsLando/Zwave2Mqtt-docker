@@ -49,9 +49,6 @@ RUN cd /root \
     && mkdir -p /dist/app \
     && mv /root/Zwave2Mqtt-${Z2M_VERSION}/* /dist/app
 
-# Clean up
-RUN rm -R /root/* && apk del .build-deps
-
 # ----------------
 # STEP 2:
 FROM node:erbium-alpine
