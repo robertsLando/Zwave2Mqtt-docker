@@ -8,6 +8,8 @@ __CROSS_COPY bin/qemu-__QEMU__-static /usr/bin/
 
 # Set the commit of Zwave2Mqtt to checkout when cloning the repo
 ENV Z2M_VERSION=ba709b0a6b52b3d2c3a84072d90b2b654626de8e
+# Latest stable 1.6 (master branch)
+ARG OPENZWAVE_GIT_SHA1=71220f433d1568cca725ff45885e7b9cd90381b6
 
 # Install required dependencies
 RUN apk update && apk --no-cache add \
@@ -30,11 +32,11 @@ RUN apk update && apk --no-cache add \
       openssl \
       make
 
-# Get latest stable 1.6 and move binaries in /dist/lib and devices db on /dist/db
+# Move binaries in /dist/lib and devices db on /dist/db
 RUN cd /root \
-    && wget http://old.openzwave.com/downloads/openzwave-1.6.1004.tar.gz \
-    && tar zxvf openzwave-*.gz \
-    && cd openzwave-* && make && make install \
+    && wget https://github.com/OpenZWave/open-zwave/archive/${OPENZWAVE_GIT_SHA1}.tar.gz -O - \
+    | tar -zxf - \
+    && cd open-zwave-${OPENZWAVE_GIT_SHA1} && make && make install \
     && mkdir -p /dist/lib \
     && mv libopenzwave.so* /dist/lib/ \
     && mkdir -p /dist/db \

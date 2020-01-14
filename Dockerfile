@@ -7,6 +7,8 @@ FROM node:erbium-alpine AS build
 
 # Set the commit of Zwave2Mqtt to checkout when cloning the repo
 ENV Z2M_VERSION=ba709b0a6b52b3d2c3a84072d90b2b654626de8e
+# Latest stable 1.4
+ARG OPENZWAVE_GIT_SHA1=449f89f063effb048f5dd6348d509a6c54fd942d
 
 # Install required dependencies
 RUN apk update && apk --no-cache add \
@@ -29,10 +31,11 @@ RUN apk update && apk --no-cache add \
       openssl \
       make
 
-# Clone 1.4 branch and move binaries in /dist/lib and devices db on /dist/db
+# Move binaries in /dist/lib and devices db on /dist/db
 RUN cd /root \
-    && git clone -b 1.4 https://github.com/OpenZWave/open-zwave.git \
-    && cd open-zwave && make && make install \
+    && wget https://github.com/OpenZWave/open-zwave/archive/${OPENZWAVE_GIT_SHA1}.tar.gz -O - \
+    | tar -zxf - \
+    && cd open-zwave-${OPENZWAVE_GIT_SHA1} && make && make install \
     && mkdir -p /dist/lib \
     && mv libopenzwave.so* /dist/lib/ \
     && mkdir -p /dist/db \
