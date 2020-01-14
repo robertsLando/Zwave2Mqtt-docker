@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 APP="Zwave2Mqtt"
 PKG_FOLDER="pkg"
@@ -21,7 +21,7 @@ mkdir -p ~/.pkg-cache/v2.5
 
 case ${build_uname_arch} in
   x86_64  ) pkg_arch=x64 ;;
-  aarch64 ) pkg_arch=arm64 
+  aarch64 ) pkg_arch=arm64
             wget https://github.com/robertsLando/pkg-binaries/raw/master/arm64/fetched-v8.11.3-alpine-arm64 -O fetched-v8.11.3-alpine-arm64
             mv fetched-v8.11.3-alpine-arm64 ~/.pkg-cache/v2.5
             ;;
