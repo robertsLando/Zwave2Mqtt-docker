@@ -1,1 +1,3 @@
 /bin/qemu-*
+/Dockerfile.*
+!/Dockerfile.cross
