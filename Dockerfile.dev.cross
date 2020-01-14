@@ -6,8 +6,7 @@ FROM __BUILD_ARCH__/node:erbium-alpine AS build
 
 __CROSS_COPY bin/qemu-__QEMU__-static /usr/bin/
 
-# Set the commit of Zwave2Mqtt to checkout when cloning the repo
-ENV Z2M_VERSION=ba709b0a6b52b3d2c3a84072d90b2b654626de8e
+ARG Z2M_VERSION=ba709b0a6b52b3d2c3a84072d90b2b654626de8e
 # Latest stable 1.6 (master branch)
 ARG OPENZWAVE_GIT_SHA1=71220f433d1568cca725ff45885e7b9cd90381b6
 
@@ -22,7 +21,6 @@ RUN apk update && apk --no-cache add \
       coreutils \
       eudev-dev \
       build-base \
-      git \
       python2-dev~=2.7 \
       bash \
       libusb-dev \
@@ -42,16 +40,15 @@ RUN cd /root \
     && mkdir -p /dist/db \
     && mv config/* /dist/db
 
-# Clone Zwave2Mqtt build pkg files and move them to /dist/pkg
 RUN cd /root \
-    && git clone https://github.com/OpenZWave/Zwave2Mqtt.git  \
-    && cd Zwave2Mqtt \
-    && git checkout ${Z2M_VERSION} \
+    && wget https://github.com/OpenZWave/Zwave2Mqtt/archive/${Z2M_VERSION}.tar.gz -O - \
+    | tar -zxf - \
+    && cd Zwave2Mqtt-${Z2M_VERSION} \
     && npm config set unsafe-perm true \
     && npm install \
     && npm run build \
     && mkdir -p /dist/app \
-    && mv /root/Zwave2Mqtt/* /dist/app
+    && mv /root/Zwave2Mqtt-${Z2M_VERSION}/* /dist/app
 
 # Clean up
 RUN rm -R /root/* && apk del .build-deps
