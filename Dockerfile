@@ -27,7 +27,7 @@ RUN apk update && apk --no-cache add \
       wget \
       tar  \
       openssl \
-      make 
+      make
 
 # Clone 1.4 branch and move binaries in /dist/lib and devices db on /dist/db
 RUN cd /root \
@@ -63,11 +63,11 @@ RUN apk update && apk add --no-cache \
     libgcc \
     libusb \
     tzdata \
-    eudev 
+    eudev
 
 # Copy files from previous build stage
 COPY --from=build /dist/lib/ /lib/
-COPY --from=build /dist/db/ /usr/local/etc/openzwave/ 
+COPY --from=build /dist/db/ /usr/local/etc/openzwave/
 COPY --from=build /dist/app/ /usr/src/app/
 
 # Set enviroment
