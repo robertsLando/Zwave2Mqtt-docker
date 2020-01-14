@@ -80,7 +80,8 @@ for IMAGE_VERSION in ${VERSIONS}; do
       sed -i "s|__QEMU__|${qemu}|g" $DOCKER_FILE.${docker_arch}
       sed -i "s|__DOCKER_ARCH__|${docker_arch}|g" $DOCKER_FILE.${docker_arch}
 
-      if [[ ${docker_arch} == "amd64" ]]; then
+      if [[ "${qemu}" == "$(uname -m)" ]]; then
+        # Same as local architecture; no need for a cross build
         sed -i "/__CROSS_/d" $DOCKER_FILE.${docker_arch}
       else
         sed -i "s/__CROSS_//g" $DOCKER_FILE.${docker_arch}
