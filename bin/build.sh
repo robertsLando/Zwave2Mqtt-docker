@@ -11,7 +11,7 @@ Z2M_GIT_SHA1=ba709b0a6b52b3d2c3a84072d90b2b654626de8e
 OPENZWAVE_16_GIT_SHA1=71220f433d1568cca725ff45885e7b9cd90381b6
 OPENZWAVE_14_GIT_SHA1=449f89f063effb048f5dd6348d509a6c54fd942d
 
-wget https://raw.githubusercontent.com/OpenZWave/Zwave2Mqtt/${Z2M_GIT_SHA1}/package.json
+wget -O package.json https://raw.githubusercontent.com/OpenZWave/Zwave2Mqtt/${Z2M_GIT_SHA1}/package.json
 LATEST=$(node -p "require('./package.json').version")
 rm package.json
 
