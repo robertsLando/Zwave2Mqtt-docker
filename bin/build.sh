@@ -76,9 +76,10 @@ for IMAGE_VERSION in ${VERSIONS}; do
           exit 1
       esac
 
-      sed -i "s|__BUILD_ARCH__|${build_arch}|g" $DOCKER_FILE.${docker_arch}
-      sed -i "s|__QEMU__|${qemu}|g" $DOCKER_FILE.${docker_arch}
-      sed -i "s|__DOCKER_ARCH__|${docker_arch}|g" $DOCKER_FILE.${docker_arch}
+      sed -e "s|__BUILD_ARCH__|${build_arch}|g" \
+        -e "s|__QEMU__|${qemu}|g" \
+        -e "s|__DOCKER_ARCH__|${docker_arch}|g" \
+        -i $DOCKER_FILE.${docker_arch}
 
       if [[ "${qemu}" == "$(uname -m)" ]]; then
         # Same as local architecture; no need for a cross build
