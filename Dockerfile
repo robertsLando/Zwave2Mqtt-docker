@@ -5,7 +5,7 @@
 # All result files will be put in /dist folder
 FROM node:erbium-alpine AS build
 
-ARG Z2M_VERSION=ba709b0a6b52b3d2c3a84072d90b2b654626de8e
+ARG Z2M_GIT_SHA1=ba709b0a6b52b3d2c3a84072d90b2b654626de8e
 # Latest stable 1.4
 ARG OPENZWAVE_GIT_SHA1=449f89f063effb048f5dd6348d509a6c54fd942d
 
@@ -40,14 +40,14 @@ RUN cd /root \
     && mv config/* /dist/db
 
 RUN cd /root \
-    && wget https://github.com/OpenZWave/Zwave2Mqtt/archive/${Z2M_VERSION}.tar.gz -O - \
+    && wget https://github.com/OpenZWave/Zwave2Mqtt/archive/${Z2M_GIT_SHA1}.tar.gz -O - \
     | tar -zxf - \
-    && cd Zwave2Mqtt-${Z2M_VERSION} \
+    && cd Zwave2Mqtt-${Z2M_GIT_SHA1} \
     && npm config set unsafe-perm true \
     && npm install \
     && npm run build \
     && mkdir -p /dist/app \
-    && mv /root/Zwave2Mqtt-${Z2M_VERSION}/* /dist/app
+    && mv /root/Zwave2Mqtt-${Z2M_GIT_SHA1}/* /dist/app
 
 # ----------------
 # STEP 2:
