@@ -7,7 +7,11 @@ set -e
 # Register quemu headers
 sudo docker run --rm --privileged multiarch/qemu-user-static:register
 
-wget https://raw.githubusercontent.com/OpenZWave/Zwave2Mqtt/master/package.json
+Z2M_GIT_SHA1=ba709b0a6b52b3d2c3a84072d90b2b654626de8e
+OPENZWAVE_16_GIT_SHA1=71220f433d1568cca725ff45885e7b9cd90381b6
+OPENZWAVE_14_GIT_SHA1=449f89f063effb048f5dd6348d509a6c54fd942d
+
+wget -O package.json https://raw.githubusercontent.com/OpenZWave/Zwave2Mqtt/${Z2M_GIT_SHA1}/package.json
 LATEST=$(node -p "require('./package.json').version")
 rm package.json
 
@@ -48,15 +52,15 @@ for IMAGE_VERSION in ${VERSIONS}; do
 
   echo INFO: Building $IMAGE_VERSION version
 
-  DOCKER_FILE=""
+  DOCKER_FILE="Dockerfile"
   arch_images=""
 
   if [[ ${IMAGE_VERSION} == $LATEST ]]; then
-    DOCKER_FILE="Dockerfile.latest"
     MANIFEST_VERSION="latest"
+    OPENZWAVE_GIT_SHA1=${OPENZWAVE_14_GIT_SHA1}
   else
-    DOCKER_FILE="Dockerfile.dev"
     MANIFEST_VERSION="latest-dev"
+    OPENZWAVE_GIT_SHA1=${OPENZWAVE_16_GIT_SHA1}
   fi
 
   for docker_arch in ${TARGET_ARCHES}; do
@@ -72,18 +76,23 @@ for IMAGE_VERSION in ${VERSIONS}; do
           exit 1
       esac
 
-      sed -i "s|__BUILD_ARCH__|${build_arch}|g" $DOCKER_FILE.${docker_arch}
-      sed -i "s|__QEMU__|${qemu}|g" $DOCKER_FILE.${docker_arch}
-      sed -i "s|__DOCKER_ARCH__|${docker_arch}|g" $DOCKER_FILE.${docker_arch}
+      sed -e "s|__BUILD_ARCH__|${build_arch}|g" \
+        -e "s|__QEMU__|${qemu}|g" \
+        -e "s|__DOCKER_ARCH__|${docker_arch}|g" \
+        -i $DOCKER_FILE.${docker_arch}
 
-      if [[ ${docker_arch} == "amd64" ]]; then
+      if [[ "${qemu}" == "$(uname -m)" ]]; then
+        # Same as local architecture; no need for a cross build
         sed -i "/__CROSS_/d" $DOCKER_FILE.${docker_arch}
       else
         sed -i "s/__CROSS_//g" $DOCKER_FILE.${docker_arch}
       fi
 
       echo INFO: Building of ${REPO}/${IMAGE_NAME}:${docker_arch}-$IMAGE_VERSION
-      docker build -f $DOCKER_FILE.${docker_arch} -t ${REPO}/${IMAGE_NAME}:${docker_arch}-$IMAGE_VERSION .
+      docker build -f $DOCKER_FILE.${docker_arch} \
+        --build-arg=Z2M_GIT_SHA1=${Z2M_GIT_SHA1} \
+        --build-arg=OPENZWAVE_GIT_SHA1=${OPENZWAVE_GIT_SHA1} \
+        -t ${REPO}/${IMAGE_NAME}:${docker_arch}-$IMAGE_VERSION .
 
       echo INFO: Successfully built ${REPO}/${IMAGE_NAME}:${docker_arch}-$IMAGE_VERSION
       echo INFO: Pushing to ${REPO}/${IMAGE_NAME}
@@ -96,7 +105,7 @@ for IMAGE_VERSION in ${VERSIONS}; do
 
   echo INFO: Creating fat manifest
 
-  createManifest $IMAGE_VERSION $IMAGE_VERSION "$arch_images" 
+  createManifest $IMAGE_VERSION $IMAGE_VERSION "$arch_images"
 
   # Update latest and latest-dev tag to point to latest versions
   createManifest $MANIFEST_VERSION $IMAGE_VERSION "$arch_images"
