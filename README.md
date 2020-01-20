@@ -6,6 +6,8 @@
 
 Docker container for Zwave2Mqtt Gateway and Control Panel app using pkg
 
+**ATTENTION: STARTING FROM Z2M 2.1.1 OZW 1.4 SUPPORT HAS ENDED AND `latest` TAG WILL ALWAYS HAVE OZW 1.6**
+
 > **Image size acually is lower than 80MB**
 
 ```bash
@@ -25,8 +27,10 @@ Supported architectures are:
 
 Available Tags:
 
-- `latest`: Always points to the latest version published using OZW 1.4
-- `latest-dev`: Always points to the latest version published using OZW 1.6
+- `latest`: Always points to the latest version published using OZW 1.6
+- `latest-dev`: **DEPRECATED** Starting from version 2.1.1 OZW 1.4 is no more supported so `latest` tag will always contain OZW 1.6. Last available `latest-dev` manifest is running z2m 2.1.0 with ozw 1.6
+
+- `2.1.1`: OZW 1.6.1004
 - `2.1.0`: OZW 1.4
 - `2.1.0-dev`: OZW 1.6.1004
 - `2.0.6`: OZW 1.4
