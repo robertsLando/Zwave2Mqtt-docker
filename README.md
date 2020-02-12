@@ -120,13 +120,12 @@ docker volume rm zwave2mqtt
 
 ## Custom builds
 
-Docker images contains latest stable images of [zwave2mqtt](https://github.com/OpenZWave/Zwave2Mqtt) repo. If you want to keep your image updated with latest changes you can build it on your local machine. Just select a commit and replace existing [commit](https://github.com/OpenZWave/Zwave2Mqtt/commits/master) in Dockerfile [here](https://github.com/robertsLando/Zwave2Mqtt-docker/blob/master/Dockerfile#L9)
+The docker images are the latest stable images of the [zwave2mqtt](https://github.com/OpenZWave/Zwave2Mqtt) repo. If you want to keep your image updated with the latest changes you can build it on your local machine. Just select a commit sha, a branch name, or a tag name, and pass it to docker build using the *--build-arg* option for the *Z2M_GIT_SHA1* and *OPENZWAVE_GIT_SHA1* arguments. For example:
 
 ```bash
 git clone https://github.com/robertsLando/Zwave2Mqtt-docker.git
 cd Zwave2Mqtt-docker
-sed -i "s|<actualCommit>|<newCommit>|g" Dockerfile
-docker build -t robertslando/zwave2mqtt:latest .
+docker build --build-arg Z2M_GIT_SHA1=56d3a554b2088b2f8ab4851aec8380764a9cd712 --build-arg OPENZWAVE_GIT_SHA1=master -t robertslando/zwave2mqtt:latest .
 ```
 
 Build just the `build` container
