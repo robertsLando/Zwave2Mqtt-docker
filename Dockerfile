@@ -12,7 +12,6 @@ ARG OPENZWAVE_GIT_SHA1=5904a725d1749d0c64608178c5409a01228758e3
 # Install required dependencies
 RUN apk update && apk --no-cache add \
     gnutls \
-    git \
     gnutls-dev \
     libusb \
     eudev \
