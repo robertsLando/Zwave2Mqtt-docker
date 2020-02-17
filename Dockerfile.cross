@@ -11,23 +11,24 @@ ARG OPENZWAVE_GIT_SHA1
 
 # Install required dependencies
 RUN apk update && apk --no-cache add \
-      gnutls \
-      gnutls-dev \
-      libusb \
-      eudev \
-      # Install build dependencies
+    gnutls \
+    git \
+    gnutls-dev \
+    libusb \
+    eudev \
+    # Install build dependencies
     && apk --no-cache --virtual .build-deps add \
-      coreutils \
-      eudev-dev \
-      build-base \
-      python2-dev~=2.7 \
-      bash \
-      libusb-dev \
-      linux-headers \
-      wget \
-      tar  \
-      openssl \
-      make
+    coreutils \
+    eudev-dev \
+    build-base \
+    python2-dev~=2.7 \
+    bash \
+    libusb-dev \
+    linux-headers \
+    wget \
+    tar  \
+    openssl \
+    make
 
 # Move binaries in /dist/lib and devices db on /dist/db
 RUN cd /root \
