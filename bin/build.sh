@@ -7,8 +7,8 @@ set -e
 # Register quemu headers
 sudo docker run --rm --privileged multiarch/qemu-user-static:register
 
-Z2M_GIT_SHA1=d8f4c7f9a2bc91eab36fb01c6028f8bf0170d481
-OPENZWAVE_16_GIT_SHA1=61cf36c67fba0e552665000b33df14a5c1d7f9e3
+Z2M_GIT_SHA1=5b5116d0ce4c51536f1b0474b500f7200189c08f
+OPENZWAVE_16_GIT_SHA1=8ca59b1d231c416ff7035a02a4b26d21d3b9a836
 OPENZWAVE_14_GIT_SHA1=449f89f063effb048f5dd6348d509a6c54fd942d
 
 wget -O package.json https://raw.githubusercontent.com/OpenZWave/Zwave2Mqtt/${Z2M_GIT_SHA1}/package.json

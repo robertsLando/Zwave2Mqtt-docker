@@ -29,6 +29,7 @@ Available Tags:
 
 - `latest`: Always points to the latest version published using OZW 1.6
 - `latest-dev`: **DEPRECATED** Starting from version 2.1.1 OZW 1.4 is no more supported so `latest` tag will always contain OZW 1.6. Last available `latest-dev` manifest is running z2m 2.1.0 with ozw 1.6
+- `3.0.0`: OZW 1.6.1045
 - `2.2.0`: OZW 1.6.1038
 - `2.1.1`: OZW 1.6.1004
 - `2.1.0`: OZW 1.4
@@ -118,6 +119,29 @@ Delete Volume
 docker volume rm zwave2mqtt
 ```
 
+### Auto Update OZW device database
+
+If you would like to enable this feature of OZW you need to keep the device database inside a volume or a local folder and map it inside the container. To do this follow this steps:
+
+```sh
+APP=$(docker run --rm -it -d robertslando/zwave2mqtt:latest)
+docker cp $APP:/usr/local/etc/openzwave ./
+docker kill $APP
+```
+
+With this command you should have copied all your container device db in a local folder named `db`. Now you should map this folder inside your container:
+
+By adding an option:
+
+`-v $(pwd)/openzwave:/usr/local/etc/openzwave`
+
+Or in docker-compose file:
+
+```yml
+volumes:
+      - ./openzwave:/usr/local/etc/openzwave
+```
+
 ## Custom builds
 
 The docker images are the latest stable images of the [zwave2mqtt](https://github.com/OpenZWave/Zwave2Mqtt) repo. If you want to keep your image updated with the latest changes you can build it on your local machine. Just select a commit sha, a branch name, or a tag name, and pass it to docker build using the *--build-arg* option for the *Z2M_GIT_SHA1* and *OPENZWAVE_GIT_SHA1* arguments. For example:
@@ -125,7 +149,7 @@ The docker images are the latest stable images of the [zwave2mqtt](https://githu
 ```bash
 git clone https://github.com/robertsLando/Zwave2Mqtt-docker.git
 cd Zwave2Mqtt-docker
-docker build --build-arg Z2M_GIT_SHA1=56d3a554b2088b2f8ab4851aec8380764a9cd712 --build-arg OPENZWAVE_GIT_SHA1=master -t robertslando/zwave2mqtt:latest .
+docker build --build-arg Z2M_GIT_SHA1=master --build-arg OPENZWAVE_GIT_SHA1=master -t robertslando/zwave2mqtt:latest .
 ```
 
 Build just the `build` container

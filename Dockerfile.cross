@@ -12,6 +12,7 @@ ARG OPENZWAVE_GIT_SHA1
 # Install required dependencies
 RUN apk update && apk --no-cache add \
     gnutls \
+    git \
     gnutls-dev \
     libusb \
     eudev \
@@ -24,30 +25,29 @@ RUN apk update && apk --no-cache add \
     bash \
     libusb-dev \
     linux-headers \
-    wget \
-    tar  \
     openssl \
     make
 
 # Move binaries in /dist/lib and devices db on /dist/db
 RUN cd /root \
-    && wget https://github.com/OpenZWave/open-zwave/archive/${OPENZWAVE_GIT_SHA1}.tar.gz -O - \
-    | tar -zxf - \
-    && cd open-zwave-${OPENZWAVE_GIT_SHA1} && make && make install \
+    && git clone https://github.com/OpenZWave/open-zwave.git \
+    && cd open-zwave \
+    && git checkout ${OPENZWAVE_GIT_SHA1} \
+    && make && make install \
     && mkdir -p /dist/lib \
     && mv libopenzwave.so* /dist/lib/ \
     && mkdir -p /dist/db \
     && mv config/* /dist/db
 
 RUN cd /root \
-    && wget https://github.com/OpenZWave/Zwave2Mqtt/archive/${Z2M_GIT_SHA1}.tar.gz -O - \
-    | tar -zxf - \
-    && cd Zwave2Mqtt-${Z2M_GIT_SHA1} \
+    && git clone https://github.com/OpenZWave/Zwave2Mqtt.git  \
+    && cd Zwave2Mqtt \
+    && git checkout ${Z2M_GIT_SHA1} \
     && npm config set unsafe-perm true \
     && npm install \
     && npm run build \
     && mkdir -p /dist/app \
-    && mv /root/Zwave2Mqtt-${Z2M_GIT_SHA1}/* /dist/app
+    && mv /root/Zwave2Mqtt/* /dist/app
 
 # ----------------
 # STEP 2:
