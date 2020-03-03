@@ -129,7 +129,7 @@ docker cp $APP:/usr/local/etc/openzwave ./
 docker kill $APP
 ```
 
-With this command you should have copied all your container device db in a local folder named `db`. Now you should map this folder inside your container:
+With this command you should have copied all your container device db in a local folder named `openzwave`. Now you should map this folder inside your container:
 
 By adding an option:
 
