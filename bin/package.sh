@@ -37,7 +37,7 @@ case ${build_uname_arch} in
 esac
 
 # Node version MUST be the same of the container
-pkg package.json -t node8-alpine-${pkg_arch} --out-path $PKG_FOLDER ${fix}
+pkg package.json -t node12-alpine-${pkg_arch} --out-path $PKG_FOLDER ${fix}
 
 cp ./node_modules/@serialport/bindings/build/Release/bindings.node $PKG_FOLDER
 cp ./node_modules/openzwave-shared/build/Release/openzwave_shared.node $PKG_FOLDER
