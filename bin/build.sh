@@ -19,7 +19,7 @@ rm package.json
 REPO="robertslando"
 IMAGE_NAME="zwave2mqtt"
 VERSIONS="$LATEST"
-TARGET_ARCHES="arm32v6 arm32v7 arm64v8 amd64"
+TARGET_ARCHES="arm32v6 arm32v7 arm64v8 arm64-v8 amd64"
 
 # $1: Manifest version $2: Image version $3: arch_images
 createManifest() {
@@ -37,6 +37,7 @@ createManifest() {
       arm32v6 ) annotate_flags="--os linux --arch arm --variant armv6" ;;
       arm32v7 ) annotate_flags="--os linux --arch arm --variant armv7" ;;
       arm64v8 ) annotate_flags="--os linux --arch arm64 --variant armv8" ;;
+      arm64-v8 ) annotate_flags="--os linux --arch arm64 --variant v8" ;;
     esac
     echo INFO: Annotating arch: ${docker_arch} with \"${annotate_flags}\"
     docker manifest annotate ${REPO}/${IMAGE_NAME}:$1 ${REPO}/${IMAGE_NAME}:${docker_arch}-$2 ${annotate_flags}
@@ -74,6 +75,7 @@ for IMAGE_VERSION in ${VERSIONS}; do
           arm32v6 ) qemu="arm" build_arch="arm32v6";;
           arm32v7 ) qemu="arm" build_arch="arm32v6";;
           arm64v8     ) qemu="aarch64" build_arch="arm64v8";;
+          arm64-v8 ) qemu="aarch64" build_arch="arm64v8";;
           *)
           echo ERROR: Unknown target arch.
           exit 1
