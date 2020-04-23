@@ -21,6 +21,7 @@ jobs:
         node-version: 12.x
     - name: Checkout Zwave2Mqtt-Docker
       uses: actions/checkout@v2
+    - name: Cross arch build
       run: |
         sudo apt-get install wget
         cd bin
