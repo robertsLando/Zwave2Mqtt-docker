@@ -16,8 +16,6 @@ RUN apk --no-cache add \
     gnutls-dev \
     libusb \
     eudev \
-    # Install build dependencies
-    && apk --no-cache --virtual .build-deps add \
     coreutils \
     eudev-dev \
     build-base \
