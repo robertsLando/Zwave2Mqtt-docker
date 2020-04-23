@@ -89,6 +89,103 @@ networks:
 #   zwave2mqtt:
 #     name: zwave2mqtt
 ```
+Like the other solutions, remember to replace device `/dev/ttyACM0` with the path of your USB stick and choose the solution you prefer for data persistence.
+
+### Run as a kubernetes deployment
+
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zwave
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: zwave
+  template:
+    metadata:
+      labels:
+        name: zwave
+    spec:
+      containers:
+      - name: zwave
+        image: robertslando/zwave2mqtt:latest
+        livenessProbe:
+          failureThreshold: 10
+          httpGet:
+            httpHeaders:
+            - name: Accept
+              value: text/plain
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 3
+          successThreshold: 1
+          timeoutSeconds: 1
+        ports:
+        - containerPort: 8091
+          name: http
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "1"
+            memory: 512Mi
+          requests:
+            cpu: "1"
+            memory: 400Mi
+        securityContext:
+          allowPrivilegeEscalation: true
+          privileged: true
+        volumeMounts:
+        - mountPath: /dev/ttyUSB1
+          name: zwavestick
+        - mountPath: /usr/src/app/store
+          name: data
+        # - mountPath: /usr/src/app/store/settings.json <-- if putting your settings.json in a secret
+        #   name: config
+        #   readOnly: true
+        #   subPath: settings.json
+      nodeSelector:
+        kubernetes.io/hostname: stick1 #<--- the name of your cluster node that the zwave usb stick in
+      volumes:
+      # - name: config <-- if putting your settings.json in a secret
+      #   secret:
+      #     defaultMode: 420
+      #     secretName: zwave2mqtt
+      - name: zwavestick
+        hostPath:
+          path: /dev/ttyACM0
+          type: File
+      - name: data
+          hostPath:
+            path: /zwave/data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zwave
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+  selector:
+    name: zwave
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: zwave
+spec:
+  rules:
+  - host: zwave.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: zwave
+          servicePort: http
+```
 
 Like the other solutions, remember to replace device `/dev/ttyACM0` with the path of your USB stick and choose the solution you prefer for data persistence.
 
