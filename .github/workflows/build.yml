@@ -1,0 +1,27 @@
+name: build
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Login to dockerhub
+      run: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Setup Nodejs
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Checkout Zwave2Mqtt-Docker
+      uses: actions/checkout@v2
+      run: |
+        sudo apt-get install wget
+        cd bin
+        ./build.sh
