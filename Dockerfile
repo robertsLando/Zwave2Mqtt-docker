@@ -10,14 +10,12 @@ ARG Z2M_GIT_SHA1=d084fdf4eeb8287840b28d91e5714f7e537d166b
 ARG OPENZWAVE_GIT_SHA1=14f2ba743ff5ce893f652cad3a86968e26f8ea10
 
 # Install required dependencies
-RUN apk update && apk --no-cache add \
+RUN apk --no-cache add \
     gnutls \
     git \
     gnutls-dev \
     libusb \
     eudev \
-    # Install build dependencies
-    && apk --no-cache --virtual .build-deps add \
     coreutils \
     eudev-dev \
     build-base \
@@ -28,26 +26,35 @@ RUN apk update && apk --no-cache add \
     openssl \
     make
 
-# Move binaries in /dist/lib and devices db on /dist/db
-RUN cd /root \
-    && git clone https://github.com/OpenZWave/open-zwave.git \
-    && cd open-zwave \
-    && git checkout ${OPENZWAVE_GIT_SHA1} \
-    && make && make install \
-    && mkdir -p /dist/lib \
-    && mv libopenzwave.so* /dist/lib/ \
-    && mkdir -p /dist/db \
-    && mv config/* /dist/db
+WORKDIR /root
+RUN git clone https://github.com/OpenZWave/open-zwave.git 
+RUN git clone https://github.com/OpenZWave/Zwave2Mqtt.git 
 
-RUN cd /root \
-    && git clone https://github.com/OpenZWave/Zwave2Mqtt.git  \
-    && cd Zwave2Mqtt \
-    && git checkout ${Z2M_GIT_SHA1} \
-    && npm config set unsafe-perm true \
-    && npm install \
-    && npm run build \
-    && mkdir -p /dist/app \
-    && mv /root/Zwave2Mqtt/* /dist/app
+WORKDIR /root/open-zwave
+RUN git checkout ${OPENZWAVE_GIT_SHA1}
+RUN make
+RUN make install
+
+WORKDIR /root/Zwave2Mqtt
+RUN git checkout ${Z2M_GIT_SHA1}
+RUN npm config set unsafe-perm true
+RUN npm install
+RUN npm run build
+RUN npm prune --production
+RUN rm -rf \
+    .git \
+    .github \
+    *.md \
+    build \
+    docs \
+    index.html \
+    package-lock.json \
+    package.sh \
+    pkg \
+    src \
+    static \
+    stylesheets \
+    views 
 
 # ----------------
 # STEP 2:
@@ -55,7 +62,7 @@ FROM node:erbium-alpine
 
 LABEL maintainer="robertsLando"
 
-RUN apk update && apk add --no-cache \
+RUN apk add --no-cache \
     libstdc++  \
     libgcc \
     libusb \
@@ -63,9 +70,9 @@ RUN apk update && apk add --no-cache \
     eudev
 
 # Copy files from previous build stage
-COPY --from=build /dist/lib/ /lib/
-COPY --from=build /dist/db/ /usr/local/etc/openzwave/
-COPY --from=build /dist/app/ /usr/src/app/
+COPY --from=build /root/open-zwave/libopenzwave.so* /lib/
+COPY --from=build /root/open-zwave/config /usr/local/etc/openzwave
+COPY --from=build /root/Zwave2Mqtt /usr/src/app
 
 # Set enviroment
 ENV LD_LIBRARY_PATH /lib
