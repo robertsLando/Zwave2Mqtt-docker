@@ -10,7 +10,7 @@ ARG Z2M_GIT_SHA1
 ARG OPENZWAVE_GIT_SHA1
 
 # Install required dependencies
-RUN apk update && apk --no-cache add \
+RUN apk --no-cache add \
     gnutls \
     git \
     gnutls-dev \
@@ -58,7 +58,7 @@ COPY bin/qemu-__QEMU__-static /usr/bin/
 
 LABEL maintainer="robertsLando"
 
-RUN apk update && apk add --no-cache \
+RUN apk add --no-cache \
     libstdc++  \
     libgcc \
     libusb \

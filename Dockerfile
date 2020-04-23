@@ -10,7 +10,7 @@ ARG Z2M_GIT_SHA1=d084fdf4eeb8287840b28d91e5714f7e537d166b
 ARG OPENZWAVE_GIT_SHA1=14f2ba743ff5ce893f652cad3a86968e26f8ea10
 
 # Install required dependencies
-RUN apk update && apk --no-cache add \
+RUN apk --no-cache add \
     gnutls \
     git \
     gnutls-dev \
@@ -55,7 +55,7 @@ FROM node:erbium-alpine
 
 LABEL maintainer="robertsLando"
 
-RUN apk update && apk add --no-cache \
+RUN apk add --no-cache \
     libstdc++  \
     libgcc \
     libusb \
