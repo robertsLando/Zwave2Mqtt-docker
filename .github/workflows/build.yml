@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Login to dockerhub
-      run: docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+    - name: Login to dockerhub and enable experimental features
+      run: |
+        docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
+        echo '{"experimental": true}' | sudo tee -a /etc/docker/daemon.json
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
