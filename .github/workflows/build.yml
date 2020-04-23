@@ -25,4 +25,5 @@ jobs:
       run: |
         sudo apt-get install wget
         cd bin
+        ./get_qemu.sh
         ./build.sh
