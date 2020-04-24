@@ -16,6 +16,13 @@ jobs:
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: crazy-max/ghaction-docker-buildx@v1
+      with:
+        version: latest
+    - name: Available platforms
+      run: echo ${{ steps.buildx.outputs.platforms }}
     - name: Setup Nodejs
       uses: actions/setup-node@v1
       with:
@@ -25,10 +32,7 @@ jobs:
     - name: Cross arch build
       run: |
         sudo apt-get install wget
-        echo '{"experimental": true}' | sudo tee -a /etc/docker/daemon.json
-        sudo systemctl restart docker
         cd bin
-        ./get_qemu.sh
-        ./build.sh
+        ./buildx.sh
       env:
         DOCKER_CLI_EXPERIMENTAL: enabled

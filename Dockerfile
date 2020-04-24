@@ -1,13 +1,9 @@
 # ----------------
 # STEP 1:
-# https://lobradov.github.io/Building-docker-multiarch-images/
-# Build Openzwave and Zwave2Mqtt pkg
-# All result files will be put in /dist folder
 FROM node:erbium-alpine AS build
 
-ARG Z2M_GIT_SHA1=d084fdf4eeb8287840b28d91e5714f7e537d166b
-# Latest stable 1.4
-ARG OPENZWAVE_GIT_SHA1=14f2ba743ff5ce893f652cad3a86968e26f8ea10
+ARG Z2M_GIT_SHA1=master
+ARG OPENZWAVE_GIT_SHA1=master
 
 # Install required dependencies
 RUN apk --no-cache add \
