@@ -33,6 +33,7 @@ jobs:
       run: |
         sudo apt-get install wget
         cd bin
+        chmod +x buildx.sh
         ./buildx.sh
       env:
         DOCKER_CLI_EXPERIMENTAL: enabled
