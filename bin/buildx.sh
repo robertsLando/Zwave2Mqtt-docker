@@ -8,7 +8,7 @@ DOCKER_TAGS=($(wget -q https://registry.hub.docker.com/v1/repositories/robertsla
 TAGS="-t robertslando/zwave2mqtt:dev"
 
 # check if there is an image with this version, if not create new tags latest and $VERSION
-if [[ " ${DOCKER_TAGS[@]} " =~ " ${VERSION} " ]]; then 
+if [[ ! " ${DOCKER_TAGS[@]} " =~ " ${VERSION} " ]]; then 
     TAGS="$TAGS -t robertslando/zwave2mqtt:latest -t robertslando/zwave2mqtt:$VERSION" # make a new release
 fi
 
