@@ -30,6 +30,8 @@ Available Tags:
 - `latest`: Always points to the latest stable version published (using OZW 1.6)
 - `dev`:  Always point to latest OZW and Zwave2Mqtt master branches
 - `latest-dev`: **DEPRECATED** Starting from version 2.1.1 OZW 1.4 is no more supported so `latest` tag will always contain OZW 1.6. Last available `latest-dev` manifest is running z2m 2.1.0 with ozw 1.6
+- `3.1.0`: OZW 1.6.1115
+- `3.0.4`: OZW 1.6.1115
 - `3.0.3`: OZW 1.6.1080
 - `3.0.2`: OZW 1.6.1061
 - `3.0.1`: OZW 1.6.1045
